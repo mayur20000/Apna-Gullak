@@ -41,6 +41,25 @@ class FirebaseService {
     await _auth.signOut();
   }
 
+  // Reset password
+  Future<void> resetPassword(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      throw Exception('Password reset failed: ${e.toString()}');
+    }
+  }
+
+  // Update user profile
+  Future<void> updateProfile(String displayName) async {
+    try {
+      await _auth.currentUser?.updateDisplayName(displayName);
+      await _auth.currentUser?.reload();
+    } catch (e) {
+      throw Exception('Profile update failed: ${e.toString()}');
+    }
+  }
+
   // Get user goals as a stream
   Stream<List<Goal>> getUserGoals() {
     User? user = _auth.currentUser;

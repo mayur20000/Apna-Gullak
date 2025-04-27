@@ -3,13 +3,126 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:glassmorphism/glassmorphism.dart';
 import '../services/firebase_service.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  final FirebaseService _firebaseService = FirebaseService();
+
+  void _showEditProfileDialog() {
+    final nameController =
+    TextEditingController(text: _firebaseService.currentUser?.displayName);
+    final formKey = GlobalKey<FormState>();
+
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: GlassmorphicContainer(
+          width: 300,
+          height: 250,
+          borderRadius: 20,
+          blur: 20,
+          alignment: Alignment.center,
+          border: 2,
+          linearGradient: LinearGradient(
+            colors: [
+              Colors.white.withOpacity(0.2),
+              Colors.white.withOpacity(0.1),
+            ],
+          ),
+          borderGradient:
+          const LinearGradient(colors: [Colors.white24, Colors.white10]),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    'Edit Profile',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: nameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Full Name',
+                      labelStyle: TextStyle(color: Colors.white70),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white70),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white70),
+                      ),
+                    ),
+                    style: const TextStyle(color: Colors.white),
+                    validator: (value) =>
+                    value!.isEmpty ? 'Enter your name' : null,
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () => Navigator.pop(context),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.grey,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        child: const Text('Cancel'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          if (formKey.currentState!.validate()) {
+                            try {
+                              await _firebaseService
+                                  .updateProfile(nameController.text);
+                              Navigator.pop(context);
+                              setState(() {}); // Refresh UI
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Profile updated')),
+                              );
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(e.toString())),
+                              );
+                            }
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF26A69A),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        child: const Text('Save'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final FirebaseService firebaseService = FirebaseService();
-    final user = firebaseService.currentUser;
+    final user = _firebaseService.currentUser;
     final walletBalance = 100.0; // Mock wallet balance
     return Container(
       decoration: const BoxDecoration(
@@ -65,7 +178,19 @@ class ProfileScreen extends StatelessWidget {
                     user?.email ?? 'email@example.com',
                     style: const TextStyle(color: Colors.white70),
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: _showEditProfileDialog,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF26A69A),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    child: const Text('Edit Profile',
+                        style: TextStyle(color: Colors.white)),
+                  ).animate().scale(duration: 400.ms),
+                  const SizedBox(height: 20),
                   ListTile(
                     leading: const Icon(
                         Icons.account_balance_wallet, color: Colors.white70),
@@ -88,13 +213,13 @@ class ProfileScreen extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () async {
                       try {
-                        await firebaseService.signOut();
+                        await _firebaseService.signOut();
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Logged out')),
                         );
                       } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Error: ${e.toString()}')),
+                          SnackBar(content: Text(e.toString())),
                         );
                       }
                     },
