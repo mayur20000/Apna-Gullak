@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1044361551958",
+    "project_id": "apna-gullak-42221",
+    "storage_bucket": "apna-gullak-42221.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1044361551958:android:45b81a3d8eb2858a385bf7",
+        "android_client_info": {
+          "package_name": "com.example.apna_gullak"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcnDnZ6QmIhS3ziAof_7PN4pdWhePyI-U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
