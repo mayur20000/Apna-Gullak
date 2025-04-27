@@ -297,51 +297,53 @@ class _MainScreenState extends State<MainScreen> {
           colors: [Color(0xFF26A69A), Color(0xFF00796B)],
         ),
       ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: _screens[_selectedIndex],
-        bottomNavigationBar: GlassmorphicContainer(
-          width: double.infinity,
-          height: 80,
-          borderRadius: 15,
-          blur: 20,
-          alignment: Alignment.center,
-          border: 2,
-          linearGradient: LinearGradient(
-            colors: [
-              Colors.black.withOpacity(0.7),
-              Colors.black.withOpacity(0.5),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: _screens[_selectedIndex],
+          bottomNavigationBar: GlassmorphicContainer(
+            width: double.infinity,
+            height: 70, // Reduced height to prevent overflow
+            borderRadius: 15,
+            blur: 20,
+            alignment: Alignment.center,
+            border: 2,
+            linearGradient: LinearGradient(
+              colors: [
+                Colors.black.withOpacity(0.7),
+                Colors.black.withOpacity(0.5),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderGradient:
+            const LinearGradient(colors: [Colors.black54, Colors.black38]),
+            child: BottomNavigationBar(
+              currentIndex: _selectedIndex,
+              onTap: _onItemTapped,
+              backgroundColor: Colors.transparent,
+              selectedItemColor: Colors.white,
+              unselectedItemColor: Colors.white70,
+              items: const [
+                BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+                BottomNavigationBarItem(icon: Icon(Icons.flag), label: 'Goals'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.history), label: 'Transactions'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.trending_up), label: 'Investments'),
+                BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+              ],
+            ),
           ),
-          borderGradient:
-          const LinearGradient(colors: [Colors.black54, Colors.black38]),
-          child: BottomNavigationBar(
-            currentIndex: _selectedIndex,
-            onTap: _onItemTapped,
-            backgroundColor: Colors.transparent,
-            selectedItemColor: Colors.white,
-            unselectedItemColor: Colors.white70,
-            items: const [
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-              BottomNavigationBarItem(icon: Icon(Icons.flag), label: 'Goals'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.history), label: 'Transactions'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.trending_up), label: 'Investments'),
-              BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-            ],
-          ),
+          floatingActionButton: _selectedIndex == 1
+              ? FloatingActionButton(
+            onPressed: () => _showAddGoalDialog(context),
+            backgroundColor: Colors.white,
+            elevation: 10,
+            child: const Icon(Icons.add, color: Color(0xFF26A69A)),
+          ).animate().scale(duration: 500.ms)
+              : null,
         ),
-        floatingActionButton: _selectedIndex == 1
-            ? FloatingActionButton(
-          onPressed: () => _showAddGoalDialog(context),
-          backgroundColor: Colors.white,
-          elevation: 10,
-          child: const Icon(Icons.add, color: Color(0xFF26A69A)),
-        ).animate().scale(duration: 500.ms)
-            : null,
       ),
     );
   }
