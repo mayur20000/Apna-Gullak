@@ -261,6 +261,7 @@ class _GoalDetailCardState extends State<GoalDetailCard> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
+
                   child: const Text(
                     'Redeem',
                     style: TextStyle(color: Colors.white),
