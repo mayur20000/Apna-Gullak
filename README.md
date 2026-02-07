@@ -2,6 +2,11 @@
 
 Apna Gullak is a modern savings app built with Flutter, designed to help users achieve financial goals through goal-based savings. With a sleek glassmorphic UI, it integrates Firebase for authentication and data storage, and Razorpay for seamless UPI transactions. The app is scalable, secure, and user-friendly, making it ideal for personal finance management.
 
+
+## Implementation Review
+
+A first runnable Flutter prototype has now been added under `lib/` and `pubspec.yaml`. The review checklist remains in `REVIEW_AND_IMPLEMENTATION_PLAN.md`.
+
 ## Features
 
 - **Goal Creation & Tracking**: Set savings goals (e.g., buy a phone, plan a trip) and track progress in real-time.
@@ -12,6 +17,16 @@ Apna Gullak is a modern savings app built with Flutter, designed to help users a
 - **Glassmorphic UI**: Modern, visually appealing design with animations for a smooth user experience.
 - **Real-Time Updates**: Stream-based updates for goals, balance, and transactions using Firestore.
 - **Scalable Architecture**: Organized codebase with Firestore subcollections for goals and transactions.
+
+
+## Quick Start (Prototype)
+
+```bash
+flutter pub get
+flutter run
+```
+
+This prototype currently uses an in-memory state layer to demonstrate core flows (auth, goals, wallet, transactions) without backend setup.
 
 ## Tech Stack
 
